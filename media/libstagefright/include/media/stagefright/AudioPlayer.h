@@ -45,7 +45,7 @@ public:
     };
 
     AudioPlayer(const sp<MediaPlayerBase::AudioSink> &audioSink,
-                uint32_t flags = 0);
+                uint32_t flags = 0x2);
 
     virtual ~AudioPlayer();
 

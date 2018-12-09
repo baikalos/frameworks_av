@@ -1923,7 +1923,10 @@ status_t NuPlayer2::Renderer::onOpenAudioSink(
             audioSinkChanged = true;
             mAudioSink->close();
 
-            err = mAudioSink->open(
+            err = -1;
+            int retryCount = 10;
+            while(err != OK & retryCount-- >=0 ) {
+                err = mAudioSink->open(
                     sampleRate,
                     numChannels,
                     (audio_channel_mask_t)channelMask,
@@ -1933,6 +1936,7 @@ status_t NuPlayer2::Renderer::onOpenAudioSink(
                     this,
                     (audio_output_flags_t)offloadFlags,
                     &offloadInfo);
+            }
 
             if (err == OK) {
                 err = mAudioSink->setPlaybackRate(mPlaybackSettings);

@@ -629,7 +629,7 @@ public:
     // we need to make sure that AudioTrack client has enough time to send large buffers
     //FIXME may be more appropriate if expressed in time units. Need to revise how underrun is
     // handled for offloaded tracks
-    static const int8_t kMaxTrackRetriesOffload = 20;
+    static const int8_t kMaxTrackRetriesOffload = 5;
     static const int8_t kMaxTrackStartupRetriesOffload = 100;
     static const int8_t kMaxTrackStopRetriesOffload = 2;
     static constexpr uint32_t kMaxTracksPerUid = 40;

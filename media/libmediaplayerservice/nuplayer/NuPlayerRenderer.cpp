@@ -1925,16 +1925,20 @@ status_t NuPlayer::Renderer::onOpenAudioSink(
             audioSinkChanged = true;
             mAudioSink->close();
 
-            err = mAudioSink->open(
-                    sampleRate,
-                    numChannels,
-                    (audio_channel_mask_t)channelMask,
-                    audioFormat,
-                    0 /* bufferCount - unused */,
-                    &NuPlayer::Renderer::AudioSinkCallback,
-                    this,
-                    (audio_output_flags_t)offloadFlags,
-                    &offloadInfo);
+            err = -1;
+            int retryCount = 10;
+            while(err != OK & retryCount-- >=0 ) {
+                err = mAudioSink->open(
+                        sampleRate,
+                        numChannels,
+                        (audio_channel_mask_t)channelMask,
+                        audioFormat,
+                        0 /* bufferCount - unused */,
+                        &NuPlayer::Renderer::AudioSinkCallback,
+                        this,
+                        (audio_output_flags_t)offloadFlags,
+                        &offloadInfo);
+            }
 
             if (err == OK) {
                 err = mAudioSink->setPlaybackRate(mPlaybackSettings);
