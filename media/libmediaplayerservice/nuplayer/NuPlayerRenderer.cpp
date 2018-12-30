@@ -1938,6 +1938,9 @@ status_t NuPlayer::Renderer::onOpenAudioSink(
                         this,
                         (audio_output_flags_t)offloadFlags,
                         &offloadInfo);
+                if( err != OK ) {
+                    usleep(50000);
+                }
             }
 
             if (err == OK) {
