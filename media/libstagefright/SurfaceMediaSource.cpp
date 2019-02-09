@@ -389,12 +389,9 @@ void SurfaceMediaSource::signalBufferReturned(MediaBufferBase *buffer) {
     Mutex::Autolock lock(mMutex);
 
     buffer_handle_t bufferHandle = getMediaBufferHandle(buffer);
-    ANativeWindowBuffer* curNativeHandle = NULL;
 
     for (size_t i = 0; i < mCurrentBuffers.size(); i++) {
-        curNativeHandle = mCurrentBuffers[i]->getNativeBuffer();
-        if ((mCurrentBuffers[i]->handle == bufferHandle) ||
-            ((buffer_handle_t)curNativeHandle == bufferHandle)) {
+        if (mCurrentBuffers[i]->handle == bufferHandle) {
             mCurrentBuffers.removeAt(i);
             foundBuffer = true;
             break;
@@ -410,10 +407,7 @@ void SurfaceMediaSource::signalBufferReturned(MediaBufferBase *buffer) {
             continue;
         }
 
-        curNativeHandle = mSlots[id].mGraphicBuffer->getNativeBuffer();
-
-        if ((bufferHandle == mSlots[id].mGraphicBuffer->handle) ||
-            (bufferHandle == (buffer_handle_t)curNativeHandle)) {
+        if (bufferHandle == mSlots[id].mGraphicBuffer->handle) {
             ALOGV("Slot %d returned, matches handle = %p", id,
                     mSlots[id].mGraphicBuffer->handle);
 
