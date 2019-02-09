@@ -4,7 +4,7 @@
 
 #include <media/stagefright/foundation/ABase.h>
 #include <media/stagefright/foundation/AHandlerReflector.h>
-#include <media/MediaSource.h>
+#include <media/stagefright/MediaSource.h>
 
 #define SUSPEND_VIDEO_IF_IDLE   0
 
@@ -20,7 +20,7 @@ struct RepeaterSource : public MediaSource {
     virtual sp<MetaData> getFormat();
 
     virtual status_t read(
-            MediaBufferBase **buffer, const ReadOptions *options);
+            MediaBuffer **buffer, const ReadOptions *options);
 
     void onMessageReceived(const sp<AMessage> &msg);
 
@@ -50,7 +50,7 @@ private:
     sp<ALooper> mLooper;
     sp<AHandlerReflector<RepeaterSource> > mReflector;
 
-    MediaBufferBase *mBuffer;
+    MediaBuffer *mBuffer;
     status_t mResult;
     int64_t mLastBufferUpdateUs;
 
