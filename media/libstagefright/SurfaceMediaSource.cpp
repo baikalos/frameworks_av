@@ -375,9 +375,7 @@ static buffer_handle_t getMediaBufferHandle(MediaBufferBase *buffer) {
     // need to convert to char* for pointer arithmetic and then
     // copy the byte stream into our handle
     buffer_handle_t bufferHandle;
-    VideoNativeMetadata *data = (VideoNativeMetadata *)buffer->data();
-    ANativeWindowBuffer *anwbuffer = (ANativeWindowBuffer *)data->pBuffer;
-    bufferHandle = anwbuffer->handle;
+    memcpy(&bufferHandle, (char*)(buffer->data()) + 4, sizeof(buffer_handle_t));
     return bufferHandle;
 }
 
