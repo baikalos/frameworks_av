@@ -15,9 +15,9 @@
  */
 
 #define LOG_TAG "APM_AudioPolicyManager"
-//#define LOG_NDEBUG 0
+#define LOG_NDEBUG 0
 
-//#define VERY_VERBOSE_LOGGING
+#define VERY_VERBOSE_LOGGING
 #ifdef VERY_VERBOSE_LOGGING
 #define ALOGVV ALOGV
 #else
@@ -793,10 +793,13 @@ audio_io_handle_t AudioPolicyManager::getOutput(audio_stream_type_t stream)
     if (stream == AUDIO_STREAM_MUSIC  &&
             property_get_bool("audio.deep_buffer.media", false /* default_value */)) {
         // use DEEP_BUFFER as default output for music stream type
+
+         ALOGE("getOutput():  Use DEEP_BUFFER");
          output = selectOutput(outputs, AUDIO_OUTPUT_FLAG_DEEP_BUFFER, AUDIO_FORMAT_INVALID);
     }
     else{
-          output = selectOutput(outputs, AUDIO_OUTPUT_FLAG_NONE, AUDIO_FORMAT_INVALID);
+         output = selectOutput(outputs, AUDIO_OUTPUT_FLAG_NONE, AUDIO_FORMAT_INVALID);
+         ALOGE("getOutput():  DEEP_BUFFER disabled");
     }
     ALOGV("getOutput() stream %d selected device %08x, output %d", stream, device, output);
     return output;
@@ -927,11 +930,13 @@ audio_io_handle_t AudioPolicyManager::getOutputForDevice(
     }
     // only allow deep buffering for music stream type
     if (stream != AUDIO_STREAM_MUSIC) {
+        ALOGE("getOutputForDevice():  Disable DEEP_BUFFER for non music stream");
         *flags = (audio_output_flags_t)(*flags &~AUDIO_OUTPUT_FLAG_DEEP_BUFFER);
     } else if (/* stream == AUDIO_STREAM_MUSIC && */
             *flags == AUDIO_OUTPUT_FLAG_NONE &&
             property_get_bool("audio.deep_buffer.media", false /* default_value */)) {
         // use DEEP_BUFFER as default output for music stream type
+        ALOGE("getOutputForDevice():  Enable DEEP_BUFFER for music stream");
         *flags = (audio_output_flags_t)AUDIO_OUTPUT_FLAG_DEEP_BUFFER;
     }
     if (stream == AUDIO_STREAM_TTS) {
@@ -2393,15 +2398,19 @@ audio_io_handle_t AudioPolicyManager::selectOutputForMusicEffects()
             ALOGV("selectOutputForMusicEffects activeOnly %d output %d flags 0x%08x",
                   activeOnly, output, desc->mFlags);
             if ((desc->mFlags & AUDIO_OUTPUT_FLAG_COMPRESS_OFFLOAD) != 0) {
+        	ALOGE("AUDIO_OUTPUT_FLAG_COMPRESS_OFFLOAD");
                 outputOffloaded = output;
             }
             if ((desc->mFlags == AUDIO_OUTPUT_FLAG_DIRECT) != 0) {
+        	ALOGE("AUDIO_OUTPUT_FLAG_DIRECT");
                 outputDirect = output;
             }
             if ((desc->mFlags & AUDIO_OUTPUT_FLAG_DEEP_BUFFER) != 0) {
+        	ALOGE("AUDIO_OUTPUT_FLAG_DEEP_BUFFER");
                 outputDeepBuffer = output;
             }
             if ((desc->mFlags & AUDIO_OUTPUT_FLAG_PRIMARY) != 0) {
+        	ALOGE("AUDIO_OUTPUT_FLAG_PRIMARY");
                 outputPrimary = output;
             }
         }
