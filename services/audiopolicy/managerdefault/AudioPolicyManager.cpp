@@ -31,6 +31,7 @@
 
 #define AUDIO_POLICY_XML_CONFIG_FILE_PATH_MAX_LENGTH 128
 #define AUDIO_POLICY_XML_CONFIG_FILE_NAME "audio_policy_configuration.xml"
+#define AUDIO_POLICY_HQ_XML_CONFIG_FILE_NAME "audio_policy_configuration_hq.xml"
 #define AUDIO_POLICY_A2DP_OFFLOAD_DISABLED_XML_CONFIG_FILE_NAME \
         "audio_policy_configuration_a2dp_offload_disabled.xml"
 #define AUDIO_POLICY_BLUETOOTH_LEGACY_HAL_XML_CONFIG_FILE_NAME \
@@ -4256,7 +4257,11 @@ static status_t deserializeAudioPolicyXmlConfig(AudioPolicyConfig &config) {
     } else if (property_get_bool("persist.bluetooth.bluetooth_audio_hal.disabled", false)) {
         fileNames.push_back(AUDIO_POLICY_BLUETOOTH_LEGACY_HAL_XML_CONFIG_FILE_NAME);
     }
-    fileNames.push_back(AUDIO_POLICY_XML_CONFIG_FILE_NAME);
+    if (property_get_bool("persist.baikal_audio_hq", false)) {
+        fileNames.push_back(AUDIO_POLICY_HQ_XML_CONFIG_FILE_NAME);
+    } else {
+        fileNames.push_back(AUDIO_POLICY_XML_CONFIG_FILE_NAME);
+    }
 
     for (const char* fileName : fileNames) {
         for (int i = 0; i < kConfigLocationListSize; i++) {
