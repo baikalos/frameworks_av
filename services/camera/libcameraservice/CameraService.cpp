@@ -16,7 +16,7 @@
 
 #define LOG_TAG "CameraService"
 #define ATRACE_TAG ATRACE_TAG_CAMERA
-//#define LOG_NDEBUG 0
+#define LOG_NDEBUG 0
 
 #include <algorithm>
 #include <climits>
@@ -1320,6 +1320,14 @@ Status CameraService::connect(
     Status ret = Status::ok();
 
     String8 id = cameraIdIntToStr(api1CameraId);
+#ifdef FACE_UNLOCK_CAMERA_ID
+    String8 clientName8(clientPackageName);
+    ALOGE("Check for faceunlock %s", clientName8.string());
+    if (strcmp16(clientPackageName, String16("com.motorola.faceunlock")) == 0 &&
+           api1CameraId == 1) {
+        id = cameraIdIntToStr(FACE_UNLOCK_CAMERA_ID);
+    }
+#endif
     sp<Client> client = nullptr;
     ret = connectHelper<ICameraClient,Client>(cameraClient, id, api1CameraId,
             CAMERA_HAL_API_VERSION_UNSPECIFIED, clientPackageName, clientUid, clientPid, API_1,
