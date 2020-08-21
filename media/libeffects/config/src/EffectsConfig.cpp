@@ -24,6 +24,7 @@
 
 #include <tinyxml2.h>
 #include <log/log.h>
+#include <cutils/properties.h>
 
 #include <media/EffectsConfig.h>
 
@@ -133,12 +134,32 @@ bool stringToStreamType(const char *streamName, Type* type)
 
 /** Parse a library xml note and push the result in libraries or return false on failure. */
 bool parseLibrary(const XMLElement& xmlLibrary, Libraries* libraries) {
+    
     const char* name = xmlLibrary.Attribute("name");
     const char* path = xmlLibrary.Attribute("path");
     if (name == nullptr || path == nullptr) {
         ALOGE("library must have a name and a path: %s", dump(xmlLibrary));
         return false;
     }
+
+    bool dolby = !strcmp(name,"dap");
+    bool qc = !strncmp(name,"qc",2);
+
+    if (qc && property_get_bool("persist.baikal.qcae.disable", false)) {
+        ALOGE("Baikal: QC effects disabled: %s", dump(xmlLibrary));
+        return false;
+    }
+
+    if (!dolby && !qc && property_get_bool("persist.baikal.ae.disable", false)) {
+        ALOGE("Baikal: standard effects disabled: %s", dump(xmlLibrary));
+        return false;
+    }
+
+    if (dolby && !property_get_bool("persist.baikal.dolby.enable", false)) {
+        ALOGE("Baikal: Dolby disabled: %s", dump(xmlLibrary));
+        return false;
+    }
+
     libraries->push_back({name, path});
     return true;
 }
