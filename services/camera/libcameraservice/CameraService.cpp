@@ -1482,6 +1482,16 @@ Status CameraService::connect(
     Status ret = Status::ok();
 
     String8 id = cameraIdIntToStr(api1CameraId);
+
+#ifdef FACE_UNLOCK_CAMERA_ID
+    String8 clientName8(clientPackageName);
+    if (strcmp16(clientPackageName, String16("com.motorola.faceunlock")) == 0 &&
+           api1CameraId == 1) {
+        ALOGE("Open for faceunlock %s", clientName8.string());
+        id = cameraIdIntToStr(FACE_UNLOCK_CAMERA_ID);
+    }
+#endif
+
     sp<Client> client = nullptr;
     ret = connectHelper<ICameraClient,Client>(cameraClient, id, api1CameraId,
             CAMERA_HAL_API_VERSION_UNSPECIFIED, clientPackageName, std::unique_ptr<String16>(),
