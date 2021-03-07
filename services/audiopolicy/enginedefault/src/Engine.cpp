@@ -34,6 +34,7 @@
 #include <media/AudioContainers.h>
 #include <utils/String8.h>
 #include <utils/Log.h>
+#include <cutils/properties.h>
 
 namespace android
 {
@@ -148,6 +149,29 @@ DeviceVector Engine::getDevicesForStrategyInt(legacy_strategy strategy,
                                               const SwAudioOutputCollection &outputs) const
 {
     DeviceVector devices;
+    char value[PROPERTY_VALUE_MAX];
+
+    ALOGW("getDevicesForStrategyInt() %d", strategy);
+
+    property_get("persist.baikal.sonif_a2dp", value, "0");
+    if( std::string(value) == "1" && outputs.isA2dpSupported() ) {
+        if( strategy == STRATEGY_SONIFICATION_RESPECTFUL ) strategy = STRATEGY_SONIFICATION;
+    }
+
+    property_get("persist.baikal.assist_a2dp", value, "0");
+    if( std::string(value) == "1" && outputs.isA2dpSupported() ) {
+        if( strategy == STRATEGY_CALL_ASSISTANT ) strategy = STRATEGY_SONIFICATION;
+    }
+
+    property_get("persist.baikal.media_a2dp", value, "0");
+    if( std::string(value) == "1" && outputs.isA2dpSupported() ) {
+        if( strategy == STRATEGY_MEDIA ) strategy = STRATEGY_SONIFICATION;
+    }
+
+    property_get("persist.baikal.none_a2dp", value, "0");
+    if( std::string(value) == "1" && outputs.isA2dpSupported() ) {
+        if( strategy == STRATEGY_NONE ) strategy = STRATEGY_SONIFICATION;
+    }
 
     switch (strategy) {
 
