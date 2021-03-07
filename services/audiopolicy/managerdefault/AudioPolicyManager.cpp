@@ -20,7 +20,7 @@
 // to enable VERBOSE logging dynamically.
 // You can enable VERBOSE logging as follows:
 // adb shell setprop log.tag.APM_AudioPolicyManager V
-#define LOG_NDEBUG 0
+//#define LOG_NDEBUG 0
 
 //#define VERY_VERBOSE_LOGGING
 #ifdef VERY_VERBOSE_LOGGING
@@ -4463,11 +4463,11 @@ static status_t deserializeAudioPolicyXmlConfig(AudioPolicyConfig &config) {
     } else if (property_get_bool("persist.bluetooth.bluetooth_audio_hal.disabled", false)) {
         fileNames.push_back(AUDIO_POLICY_BLUETOOTH_LEGACY_HAL_XML_CONFIG_FILE_NAME);
     }
-    if (property_get_bool("persist.baikal_audio_hq", false)) {
-        fileNames.push_back(AUDIO_POLICY_HQ_XML_CONFIG_FILE_NAME);
-    } else {
+    //if (property_get_bool("persist.baikal_audio_hq", false)) {
+    //    fileNames.push_back(AUDIO_POLICY_HQ_XML_CONFIG_FILE_NAME);
+    //} else {
         fileNames.push_back(AUDIO_POLICY_XML_CONFIG_FILE_NAME);
-    }
+    //}
 
     for (const char* fileName : fileNames) {
         for (const auto& path : audio_get_configuration_paths()) {
