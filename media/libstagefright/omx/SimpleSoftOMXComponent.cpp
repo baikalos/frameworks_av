@@ -112,7 +112,7 @@ bool SimpleSoftOMXComponent::isSetParameterAllowed(
             break;
         }
 
-         case OMX_IndexParamAudioAndroidAacDrcPresentation:
+        case OMX_IndexParamAudioAndroidAacDrcPresentation:
         {
             if (mState == OMX_StateInvalid) {
                 return false;
@@ -120,7 +120,7 @@ bool SimpleSoftOMXComponent::isSetParameterAllowed(
             const OMX_AUDIO_PARAM_ANDROID_AACDRCPRESENTATIONTYPE *aacPresParams =
                             (const OMX_AUDIO_PARAM_ANDROID_AACDRCPRESENTATIONTYPE *)params;
             if (!isValidOMXParam(aacPresParams)) {
-                return false;
+//                return false;
             }
             return true;
          }

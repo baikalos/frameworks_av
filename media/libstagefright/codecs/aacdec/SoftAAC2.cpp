@@ -376,8 +376,9 @@ OMX_ERRORTYPE SoftAAC2::internalGetParameter(
             ALOGD("get OMX_IndexParamAudioAndroidAacDrcPresentation");
 
             if (!isValidOMXParam(aacPresParams)) {
-                return OMX_ErrorBadParameter;
-            }
+                ALOGD("get OMX_IndexParamAudioAndroidAacDrcPresentation error. Ignoring.");
+                //return OMX_ErrorBadParameter;
+            } else {
             aacPresParams->nDrcEffectType = mDrcEffectType;
             aacPresParams->nDrcAlbumMode = mDrcAlbumMode;
             aacPresParams->nDrcBoost =  mDrcBoostFactor;
@@ -387,6 +388,7 @@ OMX_ERRORTYPE SoftAAC2::internalGetParameter(
             aacPresParams->nEncodedTargetLevel = mDrcEncTargetLevel;
             aacPresParams ->nDrcOutputLoudness = mDrcOutputLoudness;
             return OMX_ErrorNone;
+            }
         }
 
         default:
