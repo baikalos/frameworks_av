@@ -390,7 +390,7 @@ OMX_ERRORTYPE SoftAAC2::internalGetParameter(
             return OMX_ErrorNone;
             }
         }
-
+        FDK_FALLTHROUGH;
         default:
             return SimpleSoftOMXComponent::internalGetParameter(index, params);
     }
