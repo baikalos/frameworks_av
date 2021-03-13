@@ -11,6 +11,7 @@ service audioserver /system/bin/audioserver
     # Keep the original service names for backward compatibility
     onrestart restart vendor.audio-hal-2-0
     onrestart restart audio-hal-2-0
+    writepid /dev/cpuset/foreground/tasks
 
 on property:vts.native_server.on=1
     stop audioserver
